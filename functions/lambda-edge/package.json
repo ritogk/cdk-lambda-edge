@@ -1,5 +1,5 @@
 {
-  "name": "@symmetry-inc/cloudfront-check-allow-list",
+  "name": "lambda@edge",
   "type": "module",
   "dependencies": {},
   "devDependencies": {
