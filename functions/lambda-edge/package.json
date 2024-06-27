@@ -1,5 +1,5 @@
 {
-  "name": "lambda@edge",
+  "name": "lambda-edge",
   "type": "module",
   "dependencies": {},
   "devDependencies": {
