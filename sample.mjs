@@ -1,3 +1,5 @@
+import { createRequire as topLevelCreateRequire } from "module";
+const require = topLevelCreateRequire(import.meta.url);
 var dt = Object.create;
 var I = Object.defineProperty;
 var mt = Object.getOwnPropertyDescriptor;
