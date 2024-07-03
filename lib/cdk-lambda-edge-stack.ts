@@ -61,7 +61,6 @@ export class CdkLambdaEdgeStack extends cdk.Stack {
 
     const edgeFunction = new cloudfront.experimental.EdgeFunction(
       this,
-
       "LambdaEdgeFunction",
       {
         code: lambda.Code.fromAsset(functionDir, {
@@ -76,8 +75,10 @@ export class CdkLambdaEdgeStack extends cdk.Stack {
                 "mkdir -p /asset-output/work",
                 "cp -R /asset-input/* /asset-output/work",
                 "cd /asset-output/work",
-                "npm i --omit=dev",
-                `npx esbuild index.mts --define:process.env.SAMPLE_ENV="'test'" --minify --platform=node --bundle --format=esm --outfile=index.mjs`,
+                "npm i",
+                `npx esbuild index.mts --define:process.env.SAMPLE_ENV="'test'" --minify --platform=node --bundle --format=esm --outfile=index.mjs --external:@aws-sdk/client-ssm --banner:js='import { createRequire as topLevelCreateRequire } from "module"; const require = topLevelCreateRequire(import.meta.url);'`,
+                // commandのみの変更でエラーになるのでその対策
+                "date +'// %Y-%m-%d %H:%M:%S' >> index.mjs",
                 "cp index.mjs /asset-output",
                 "rm -rf /asset-output/work",
               ].join(" && "),
@@ -86,9 +87,12 @@ export class CdkLambdaEdgeStack extends cdk.Stack {
           },
         }),
         handler: "index.handler",
+        description: "This is",
         runtime: cdk.aws_lambda.Runtime.NODEJS_20_X,
       }
     );
+
+    // console.log(`latestVersion: [${edgeFunction.latestVersion}]`);
 
     // command: [
     //   'bash', '-c', [
